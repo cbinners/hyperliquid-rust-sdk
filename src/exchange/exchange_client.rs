@@ -125,6 +125,16 @@ impl ExchangeClient {
         })
     }
 
+    // expose the signer
+    pub fn sign_action(&self, action: Actions) -> (u64, Signature) {
+        let timestamp = next_nonce();
+        let connection_id = action.hash(timestamp, None).unwrap();
+        let action = serde_json::to_value(&action).unwrap();
+        let is_mainnet = self.http_client.is_mainnet();
+        let signature = sign_l1_action(&self.wallet, connection_id, is_mainnet).unwrap();
+        (timestamp, signature)
+    }
+
     async fn post(
         &self,
         action: serde_json::Value,
