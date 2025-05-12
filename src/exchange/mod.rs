@@ -4,7 +4,7 @@ mod cancel;
 mod exchange_client;
 mod exchange_responses;
 mod modify;
-mod order;
+pub mod order;
 
 pub use actions::*;
 pub use builder::*;
